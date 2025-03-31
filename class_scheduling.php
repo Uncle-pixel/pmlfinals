@@ -1,9 +1,42 @@
+<!-- filepath: c:\xampp\htdocs\pmlfinals\class_scheduling.php -->
+<?php
+// Start the session to manage user authentication or other session data
+session_start();
+
+// Example: Check if the user is logged in (optional)
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page if not logged in
+    header("Location: login.html");
+    exit();
+}
+
+// Example: Fetch dynamic data for the schedule (replace with your database logic)
+$schedules = [
+    [
+        'course_code' => 'CS101',
+        'course_name' => 'Introduction to Programming',
+        'schedule' => 'MWF 9:00 AM - 10:30 AM',
+        'room' => 'Room 302',
+        'instructor' => 'Prof. Smith',
+        'status' => 'Active'
+    ],
+    [
+        'course_code' => 'MATH201',
+        'course_name' => 'Calculus II',
+        'schedule' => 'TTH 1:00 PM - 2:30 PM',
+        'room' => 'Room 105',
+        'instructor' => 'Prof. Johnson',
+        'status' => 'Completed'
+    ]
+];
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Class Scheduling - SPCF PORTAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* Add your CSS styles here (same as in the original HTML file) */
         /* Reset and Base Styles */
         * {
             margin: 0;
@@ -245,7 +278,7 @@
             <li><a href="course_registration.html">Course Registration</a></li>
             <li><a href="faculty_management.html">Faculty Management</a></li>
             <li><a href="grading_system.html">Grading System</a></li>
-            <li><a class="active" href="class_scheduling.html">Class Scheduling</a></li>
+            <li><a class="active" href="class_scheduling.php">Class Scheduling</a></li>
             <li><a class="button" href="notifications.html">Notifications</a></li>
         </ul>
     </nav>
@@ -274,23 +307,20 @@
                 </tr>
             </thead>
             <tbody>
+                <?php foreach ($schedules as $schedule): ?>
                 <tr>
-                    <td>CS101</td>
-                    <td>Introduction to Programming</td>
-                    <td>MWF 9:00 AM - 10:30 AM</td>
-                    <td>Room 302</td>
-                    <td>Prof. Smith</td>
-                    <td><span class="status-indicator status-active">Active</span></td>
+                    <td><?php echo htmlspecialchars($schedule['course_code']); ?></td>
+                    <td><?php echo htmlspecialchars($schedule['course_name']); ?></td>
+                    <td><?php echo htmlspecialchars($schedule['schedule']); ?></td>
+                    <td><?php echo htmlspecialchars($schedule['room']); ?></td>
+                    <td><?php echo htmlspecialchars($schedule['instructor']); ?></td>
+                    <td>
+                        <span class="status-indicator <?php echo $schedule['status'] === 'Active' ? 'status-active' : 'status-completed'; ?>">
+                            <?php echo htmlspecialchars($schedule['status']); ?>
+                        </span>
+                    </td>
                 </tr>
-                <tr>
-                    <td>MATH201</td>
-                    <td>Calculus II</td>
-                    <td>TTH 1:00 PM - 2:30 PM</td>
-                    <td>Room 105</td>
-                    <td>Prof. Johnson</td>
-                    <td><span class="status-indicator status-completed">Completed</span></td>
-                </tr>
-                <!-- Add more rows as needed -->
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

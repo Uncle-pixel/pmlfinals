@@ -68,9 +68,9 @@
 <body>
     <div class="login-container">
         <h1>Login</h1>
-        <form action="student_info.html">
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
+        <form action="login.php" method="POST">
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
         <a href="#">Forgot your password?</a>

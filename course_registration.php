@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+// Example: Check if the user is logged in (optional)
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page if not logged in
+    header("Location: login.html");
+    exit();
+}
+
+// Example: Fetch dynamic data for courses (replace with your database logic)
+$courses = [
+    [
+        'course_code' => 'CS101',
+        'course_name' => 'Introduction to Programming',
+        'description' => 'Learn the basics of programming using Python.',
+        'status' => 'Available'
+    ],
+    [
+        'course_code' => 'MATH201',
+        'course_name' => 'Calculus II',
+        'description' => 'Advanced calculus topics for engineering students.',
+        'status' => 'Full'
+    ]
+];
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -182,7 +208,7 @@
     <nav>
         <ul>
             <li><a href="student_info.html">Student Information</a></li>
-            <li><a href="course_registration.html">Course Registration</a></li>
+            <li><a href="course_registration.php">Course Registration</a></li>
             <li><a href="faculty_management.html">Faculty Management</a></li>
             <li><a href="grading_system.html">Grading System</a></li>
             <li><a href="class_scheduling.html">Class Scheduling</a></li>
@@ -192,6 +218,19 @@
     <div class="content">
         <h2>Course Registration</h2>
         <p>Manage and register for your courses efficiently.</p>
+        <div class="course-list">
+            <?php foreach ($courses as $course): ?>
+            <div class="course-card">
+                <div class="course-info">
+                    <h3><?php echo htmlspecialchars($course['course_name']); ?></h3>
+                    <p><?php echo htmlspecialchars($course['description']); ?></p>
+                </div>
+                <button class="add-course-btn" <?php echo $course['status'] === 'Full' ? 'disabled' : ''; ?>>
+                    <?php echo $course['status'] === 'Full' ? 'Full' : 'Add Course'; ?>
+                </button>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
     <script>
         function toggleMenu() {

@@ -1,3 +1,35 @@
+<?php
+session_start();
+
+// Example: Check if the user is logged in (optional)
+if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page if not logged in
+    header("Location: login.html");
+    exit();
+}
+
+// Example: Fetch dynamic data for grades (replace with your database logic)
+$grades = [
+    [
+        'student_name' => 'John Doe',
+        'course' => 'Introduction to Programming',
+        'grade' => 'A',
+        'status' => 'Passed'
+    ],
+    [
+        'student_name' => 'Jane Smith',
+        'course' => 'Calculus II',
+        'grade' => 'B',
+        'status' => 'Passed'
+    ],
+    [
+        'student_name' => 'Mark Johnson',
+        'course' => 'Physics I',
+        'grade' => 'F',
+        'status' => 'Failed'
+    ]
+];
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,15 +114,34 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
-        .button {
-            background-color: #ff4500;
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        .button:hover {
-            background-color: #e63900;
+        .grades-table th,
+        .grades-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .grades-table th {
+            background-color: #0073e6;
+            color: white;
+        }
+        .grades-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .grades-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .status-passed {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .status-failed {
+            color: #e74c3c;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -116,7 +167,7 @@
             <li><a href="student_info.html">Student Information</a></li>
             <li><a href="course_registration.html">Course Registration</a></li>
             <li><a href="faculty_management.html">Faculty Management</a></li>
-            <li><a href="grading_system.html">Grading System</a></li>
+            <li><a href="grading_system.php">Grading System</a></li>
             <li><a href="class_scheduling.html">Class Scheduling</a></li>
             <li><a class="button" href="notifications.html">Notifications/ Announcements</a></li>
         </ul>
@@ -124,6 +175,28 @@
     <div class="content">
         <h2>Grading System</h2>
         <p>View and manage student grades.</p>
+        <table class="grades-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($grades as $grade): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($grade['student_name']); ?></td>
+                    <td><?php echo htmlspecialchars($grade['course']); ?></td>
+                    <td><?php echo htmlspecialchars($grade['grade']); ?></td>
+                    <td class="<?php echo $grade['status'] === 'Passed' ? 'status-passed' : 'status-failed'; ?>">
+                        <?php echo htmlspecialchars($grade['status']); ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
     <script>
         function toggleMenu() {
