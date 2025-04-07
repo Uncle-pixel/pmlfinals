@@ -1,33 +1,16 @@
 <?php
 session_start();
 
-// Example: Check if the user is logged in (optional)
 if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page if not logged in
     header("Location: login.html");
     exit();
 }
 
-// Example: Fetch dynamic data for grades (replace with your database logic)
+// Example grades (replace with DB logic)
 $grades = [
-    [
-        'student_name' => 'John Doe',
-        'course' => 'Introduction to Programming',
-        'grade' => 'A',
-        'status' => 'Passed'
-    ],
-    [
-        'student_name' => 'Jane Smith',
-        'course' => 'Calculus II',
-        'grade' => 'B',
-        'status' => 'Passed'
-    ],
-    [
-        'student_name' => 'Mark Johnson',
-        'course' => 'Physics I',
-        'grade' => 'F',
-        'status' => 'Failed'
-    ]
+    ['student_name' => 'John Doe', 'course' => 'Introduction to Programming', 'grade' => 'A', 'status' => 'Passed'],
+    ['student_name' => 'Jane Smith', 'course' => 'Calculus II', 'grade' => 'B', 'status' => 'Passed'],
+    ['student_name' => 'Mark Johnson', 'course' => 'Physics I', 'grade' => 'F', 'status' => 'Failed']
 ];
 ?>
 <!DOCTYPE html>
@@ -64,12 +47,16 @@ $grades = [
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
+            z-index: 100;
         }
         .menu a {
             display: block;
             padding: 10px;
             text-decoration: none;
             color: #333;
+        }
+        .menu a:hover {
+            background-color: #eee;
         }
         h1 {
             display: flex;
@@ -146,6 +133,7 @@ $grades = [
     </style>
 </head>
 <body>
+    <!-- Hamburger Menu -->
     <div class="hamburger-container">
         <div class="hamburger" onclick="toggleMenu()">
             <div></div>
@@ -153,25 +141,30 @@ $grades = [
             <div></div>
         </div>
         <div id="menu" class="menu">
-            <a href="#">Login</a>
-            <a href="#">Log Out</a>
-            <a href="#">Profile</a>
+            <a href="student_profile.php">Profile</a>
+            <a href="logout.php">Log Out</a>
         </div>
     </div>
+
+    <!-- Header -->
     <h1>
         <img src="logo.png" alt="SPCF Logo">
         <span>SPCF PORTAL</span>
     </h1>
+
+    <!-- Navigation -->
     <nav>
         <ul>
-            <li><a href="student_info.html">Student Information</a></li>
-            <li><a href="course_registration.html">Course Registration</a></li>
-            <li><a href="faculty_management.html">Faculty Management</a></li>
+            <li><a href="student_info.php">Student Information</a></li>
+            <li><a href="course_registration.php">Course Registration</a></li>
+            <li><a href="faculty_management.php">Faculty Management</a></li>
             <li><a href="grading_system.php">Grading System</a></li>
-            <li><a href="class_scheduling.html">Class Scheduling</a></li>
-            <li><a class="button" href="notifications.html">Notifications/ Announcements</a></li>
+            <li><a href="class_scheduling.php">Class Scheduling</a></li>
+            <li><a href="notifications.php">Notifications</a></li>
         </ul>
     </nav>
+
+    <!-- Main Content -->
     <div class="content">
         <h2>Grading System</h2>
         <p>View and manage student grades.</p>
@@ -198,14 +191,11 @@ $grades = [
             </tbody>
         </table>
     </div>
+
     <script>
         function toggleMenu() {
             var menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
         }
     </script>
 </body>

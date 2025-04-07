@@ -1,10 +1,11 @@
 <?php
 session_start();
 
+// Database connection details
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "pml";
+$dbname = "registered"; // Database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -14,29 +15,48 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Initialize error message
+$error_message = "";
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $role = $_POST['role'];
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']); // Store the password as plain text
+    $role = trim($_POST['role']);
 
-    // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $email, $hashed_password, $role);
-
-    if ($stmt->execute()) {
-        // Redirect to login page after successful registration
-        header("Location: login.php");
-        exit();
+    // Validate form inputs
+    if (empty($name) || empty($email) || empty($password) || empty($role)) {
+        $error_message = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error_message = "Invalid email format.";
     } else {
-        $error_message = "Error: " . $stmt->error;
-    }
+        // Check if the email already exists
+        $check_email_stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+        $check_email_stmt->bind_param("s", $email);
+        $check_email_stmt->execute();
+        $check_email_stmt->store_result();
 
-    $stmt->close();
+        if ($check_email_stmt->num_rows > 0) {
+            $error_message = "This email is already registered.";
+        } else {
+            // Use prepared statements to prevent SQL injection
+            $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $name, $email, $password, $role);
+
+            if ($stmt->execute()) {
+                // Redirect to index page after successful registration
+                header("Location: index.php");
+                exit();
+            } else {
+                $error_message = "Error: " . $stmt->error;
+            }
+
+            $stmt->close();
+        }
+
+        $check_email_stmt->close();
+    }
 }
 
 $conn->close();
@@ -129,6 +149,7 @@ $conn->close();
                 <option value="" disabled selected>Select Role</option>
                 <option value="student">Student</option>
                 <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option> <!-- Add Admin Role -->
             </select>
             <button type="submit">Register</button>
         </form>

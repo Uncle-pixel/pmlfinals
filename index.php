@@ -1,9 +1,19 @@
 <?php
 session_start();
 
-// Example: Check if the user is logged in (optional)
-$is_logged_in = isset($_SESSION['user_id']);
-$user_name = $is_logged_in ? $_SESSION['user_name'] : 'Guest';
+// Redirect to login page if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Debugging: Check session variables (remove this in production)
+echo "<pre>";
+print_r($_SESSION);
+echo "</pre>";
+
+// Retrieve user's name or set default
+$user_name = $_SESSION['user_name'] ?? 'Guest';
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,175 +21,51 @@ $user_name = $is_logged_in ? $_SESSION['user_name'] : 'Guest';
     <title>SPCF PORTAL</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(to right, #ffffff, #0044cc);
             margin: 0;
             padding: 0;
             color: #0044cc;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-            padding-top: 50px;
         }
         h1 {
-            background: rgba(0, 68, 204, 0.8);
-            padding: 25px;
-            font-size: 36px;
-            text-transform: uppercase;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            width: 80%;
-            text-align: center;
-            border-radius: 10px;
+            background: #0044cc;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-        h1 img {
-            max-height: 100px;
-            width: auto;
-        }
-        nav {
-            background: rgba(0, 68, 204, 0.2);
-            padding: 15px 0;
-            border-radius: 10px;
-            width: 80%;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
+            padding: 20px;
         }
         nav ul {
             list-style: none;
             padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 100%;
+            display: flex;
+            justify-content: center;
         }
         nav ul li {
-            margin: 0;
+            margin: 0 15px;
         }
         nav ul li a {
-            color: #0044cc;
+            color: white;
             text-decoration: none;
-            font-size: 20px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
-            font-weight: bold;
+            padding: 10px 15px;
+            background: #005bb5;
+            border-radius: 5px;
         }
         nav ul li a:hover {
-            background: #0044cc;
-            color: white;
-            transform: scale(1.1);
-        }
-        nav ul li a:active {
-            background: white;
-            color: #0044cc;
-        }
-        .hamburger-container {
-            position: absolute;
-            top: 85px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-        }
-        .hamburger div {
-            width: 35px;
-            height: 5px;
-            background-color: #0044cc;
-            margin: 6px 0;
-            transition: 0.4s;
-        }
-        .menu {
-            display: none;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            margin-top: 10px;
-        }
-        .menu a {
-            display: block;
-            text-decoration: none;
-            color: #0044cc;
-            padding: 10px;
-            font-size: 18px;
-        }
-        .menu a:hover {
-            background: #0044cc;
-            color: white;
-        }
-        .show {
-            display: block;
-        }
-        .button {
-            color: #0044cc;
-            font-size: 20px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            text-align: center;
-            display: inline-block;
-            text-decoration: none;
-        }
-        .button:hover {
-            background: #0044cc;
-            color: white;
-            transform: scale(1.1);
+            background: #003d80;
         }
     </style>
-    <script>
-        function toggleMenu() {
-            document.getElementById("menu").classList.toggle("show");
-        }
-    </script>
 </head>
 <body>
-    <div class="hamburger-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div id="menu" class="menu">
-            <a href="#">Login</a>
-            <a href="#">Log Out</a>
-            <a href="#">Profile</a>
-        </div>
-    </div>
-    <h1>
-        <img src="logo.png" alt="SPCF Logo">
-        <span>SPCF PORTAL</span>
-    </h1>
+    <h1>Welcome to SPCF Portal</h1>
+    <p>Welcome, <strong><?php echo htmlspecialchars($user_name); ?></strong>!</p>
     <nav>
         <ul>
-            <li><a href="student_info.html">Student Information</a></li>
-            <li><a href="course_registration.html">Course Registration</a></li>
-            <li><a href="faculty_management.html">Faculty Management</a></li>
-            <li><a href="grading_system.html">Grading System</a></li>
-            <li><a href="class_scheduling.html">Class Scheduling</a></li>
-            <!-- Button for Notifications/Announcements -->
-            <li><a class="button" href="notifications.html">Notifications/ Announcements</a></li>
+            <li><a href="student_info.php">Student Information</a></li>
+            <li><a href="course_registration.php">Course Registration</a></li>
+            <li><a href="faculty_management.php">Faculty Management</a></li>
+            <li><a href="grading_system.php">Grading System</a></li>
+            <li><a href="class_scheduling.php">Class Scheduling</a></li>
+            <li><a href="notifications.php">Notifications</a></li>
+            <li><a href="logout.php">Log Out</a></li>
         </ul>
     </nav>
 </body>
