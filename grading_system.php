@@ -141,7 +141,6 @@ $grades = [
             <div></div>
         </div>
         <div id="menu" class="menu">
-            <a href="student_profile.php">Profile</a>
             <a href="logout.php">Log Out</a>
         </div>
     </div>

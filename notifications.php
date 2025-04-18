@@ -141,7 +141,6 @@ $notifications = [
         <div id="menu" class="menu">
             <a href="login.php">Login</a>
             <a href="logout.php">Log Out</a>
-            <a href="profile.php">Profile</a>
         </div>
     </div>
     <h1>

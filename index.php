@@ -7,11 +7,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Debugging: Check session variables (remove this in production)
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-
 // Retrieve user's name or set default
 $user_name = $_SESSION['user_name'] ?? 'Guest';
 ?>
@@ -62,7 +57,7 @@ $user_name = $_SESSION['user_name'] ?? 'Guest';
             <li><a href="student_info.php">Student Information</a></li>
             <li><a href="course_registration.php">Course Registration</a></li>
             <li><a href="faculty_management.php">Faculty Management</a></li>
-            <li><a href="grading_system.php">Grading System</a></li>
+            <li><a href="grading_system.php">Grading System</a></li> <!-- Correct link -->
             <li><a href="class_scheduling.php">Class Scheduling</a></li>
             <li><a href="notifications.php">Notifications</a></li>
             <li><a href="logout.php">Log Out</a></li>

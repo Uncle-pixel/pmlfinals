@@ -236,7 +236,6 @@ session_start();
         <div id="menu" class="menu">
             <a href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
             <a href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-            <a href="#"><i class="fas fa-user"></i> Profile</a>
         </div>
     </div>
     <h1>

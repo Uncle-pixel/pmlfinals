@@ -27,7 +27,6 @@ $faculty_members = [
 <html>
 <head>
     <title>Faculty Management - SPCF PORTAL</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,46 +35,11 @@ $faculty_members = [
             background-color: #f4f4f4;
             text-align: center;
         }
-        .hamburger-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .hamburger {
-            display: inline-block;
-            cursor: pointer;
-        }
-        .hamburger div {
-            width: 30px;
-            height: 4px;
-            background-color: #333;
-            margin: 6px 0;
-        }
-        .menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-        }
-        .menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-        }
         h1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background-color: #0073e6;
             color: white;
             padding: 20px;
             margin: 0;
-        }
-        h1 img {
-            height: 50px;
-            margin-right: 10px;
         }
         nav {
             background-color: #005bb5;
@@ -136,30 +100,16 @@ $faculty_members = [
     </style>
 </head>
 <body>
-    <div class="hamburger-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div id="menu" class="menu">
-            <a href="#">Login</a>
-            <a href="#">Log Out</a>
-            <a href="#">Profile</a>
-        </div>
-    </div>
-    <h1>
-        <img src="logo.png" alt="SPCF Logo">
-        <span>SPCF PORTAL</span>
-    </h1>
+    <h1>Faculty Management</h1>
     <nav>
         <ul>
-            <li><a href="student_info.html">Student Information</a></li>
-            <li><a href="course_registration.html">Course Registration</a></li>
+            <li><a href="student_info.php">Student Information</a></li>
+            <li><a href="course_registration.php">Course Registration</a></li>
             <li><a href="faculty_management.php">Faculty Management</a></li>
-            <li><a href="grading_system.html">Grading System</a></li>
-            <li><a href="class_scheduling.html">Class Scheduling</a></li>
-            <li><a class="button" href="notifications.html">Notifications/ Announcements</a></li>
+            <li><a href="grading_system.php">Grading System</a></li> <!-- Link to grading_system.php -->
+            <li><a href="class_scheduling.php">Class Scheduling</a></li>
+            <li><a href="notifications.php">Notifications</a></li>
+            <li><a href="logout.php">Log Out</a></li>
         </ul>
     </nav>
     <div class="content">
@@ -178,15 +128,5 @@ $faculty_members = [
             <?php endforeach; ?>
         </div>
     </div>
-    <script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
-        }
-    </script>
 </body>
 </html>
