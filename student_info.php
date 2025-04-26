@@ -15,12 +15,25 @@ $student_info = [
     'email' => 'john.doe@spcf.edu',
     'course' => 'Bachelor of Science in Computer Science',
     'year_level' => '3rd Year',
-    'status' => 'Active'
+    'status' => 'Active',
+    'birthdate' => 'January 1, 2003',
+    'gender' => 'Male',
+    'address' => '123 Main Street, Cityville',
+    'phone' => '09123456789',
+    'emergency_contact_name' => 'Jane Doe',
+    'emergency_contact_relationship' => 'Mother',
+    'emergency_contact_phone' => '09876543210',
+    'high_school' => 'City High School',
+    'college' => 'SPCF University',
+    'family_members' => 'Father: John Sr., Mother: Jane',
+    'work_experience' => 'Intern at Tech Solutions Inc.'
 ];
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Information - SPCF PORTAL</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -29,78 +42,58 @@ $student_info = [
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            text-align: center;
         }
-        .hamburger-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-        .hamburger {
-            display: inline-block;
-            cursor: pointer;
-        }
-        .hamburger div {
-            width: 30px;
-            height: 4px;
-            background-color: #333;
-            margin: 6px 0;
-        }
-        .menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-        }
-        .menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-        }
-        h1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        header {
             background-color: #0073e6;
             color: white;
             padding: 20px;
-            margin: 0;
+            text-align: center;
         }
-        h1 img {
+        header img {
             height: 50px;
+            vertical-align: middle;
             margin-right: 10px;
+        }
+        header span {
+            font-size: 24px;
+            font-weight: bold;
         }
         nav {
             background-color: #005bb5;
-            padding: 15px;
+            padding: 10px 0;
         }
         nav ul {
             list-style: none;
+            margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            margin: 0;
+            flex-wrap: wrap;
         }
         nav ul li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
         nav ul li a {
             color: white;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
+            transition: background-color 0.3s;
         }
         nav ul li a:hover {
             background-color: #003d80;
         }
         .content {
-            margin: 20px;
+            margin: 20px auto;
+            max-width: 800px;
             background: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+        }
+        .content h2 {
+            text-align: center;
+            color: #0073e6;
         }
         .info-table {
             width: 100%;
@@ -109,7 +102,7 @@ $student_info = [
         }
         .info-table th,
         .info-table td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
             border: 1px solid #ddd;
         }
@@ -123,25 +116,29 @@ $student_info = [
         .info-table tr:hover {
             background-color: #f1f1f1;
         }
+        footer {
+            background-color: #005bb5;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 5px 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="hamburger-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div id="menu" class="menu">
-            <a href="login.php">Login</a>
-            <a href="logout.php">Log Out</a>
-            <a href="profile.php">Profile</a>
-        </div>
-    </div>
-    <h1>
+    <header>
         <img src="logo.png" alt="SPCF Logo">
         <span>SPCF PORTAL</span>
-    </h1>
+    </header>
     <nav>
         <ul>
             <li><a href="student_info.php">Student Information</a></li>
@@ -149,7 +146,7 @@ $student_info = [
             <li><a href="faculty_management.php">Faculty Management</a></li>
             <li><a href="grading_system.php">Grading System</a></li>
             <li><a href="class_scheduling.php">Class Scheduling</a></li>
-            <li><a class="button" href="notifications.php">Notifications/ Announcements</a></li>
+            <li><a href="notifications.php">Notifications/Announcements</a></li>
         </ul>
     </nav>
     <div class="content">
@@ -180,16 +177,77 @@ $student_info = [
                 <td><?php echo htmlspecialchars($student_info['status']); ?></td>
             </tr>
         </table>
+
+        <h2>Personal Information</h2>
+        <table class="info-table">
+            <tr>
+                <th>Birthdate</th>
+                <td><?php echo htmlspecialchars($student_info['birthdate']); ?></td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td><?php echo htmlspecialchars($student_info['gender']); ?></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td><?php echo htmlspecialchars($student_info['address']); ?></td>
+            </tr>
+        </table>
+
+        <h2>Contact Information</h2>
+        <table class="info-table">
+            <tr>
+                <th>Phone</th>
+                <td><?php echo htmlspecialchars($student_info['phone']); ?></td>
+            </tr>
+        </table>
+
+        <h2>Emergency Contact</h2>
+        <table class="info-table">
+            <tr>
+                <th>Name</th>
+                <td><?php echo htmlspecialchars($student_info['emergency_contact_name']); ?></td>
+            </tr>
+            <tr>
+                <th>Relationship</th>
+                <td><?php echo htmlspecialchars($student_info['emergency_contact_relationship']); ?></td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td><?php echo htmlspecialchars($student_info['emergency_contact_phone']); ?></td>
+            </tr>
+        </table>
+
+        <h2>Education Background</h2>
+        <table class="info-table">
+            <tr>
+                <th>High School</th>
+                <td><?php echo htmlspecialchars($student_info['high_school']); ?></td>
+            </tr>
+            <tr>
+                <th>College</th>
+                <td><?php echo htmlspecialchars($student_info['college']); ?></td>
+            </tr>
+        </table>
+
+        <h2>Family Background</h2>
+        <table class="info-table">
+            <tr>
+                <th>Family Members</th>
+                <td><?php echo htmlspecialchars($student_info['family_members']); ?></td>
+            </tr>
+        </table>
+
+        <h2>Work Experience</h2>
+        <table class="info-table">
+            <tr>
+                <th>Experience</th>
+                <td><?php echo htmlspecialchars($student_info['work_experience']); ?></td>
+            </tr>
+        </table>
     </div>
-    <script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
-        }
-    </script>
+    <footer>
+        &copy; <?php echo date("Y"); ?> SPCF PORTAL. All Rights Reserved.
+    </footer>
 </body>
 </html>
