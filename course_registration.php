@@ -84,123 +84,63 @@ $registered_courses = [
     <title>Course Registration - SPCF Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #0044cc;
-            --primary-dark: #003399;
-            --secondary-color: #005bb5;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --light-gray: #f4f4f4;
-            --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
         }
         
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--light-gray);
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        header {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo img {
-            height: 50px;
-            margin-right: 10px;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-        
-        .user-info span {
-            margin-right: 15px;
+        h1 {
+            background-color: #0073e6;
+            color: white;
+            padding: 20px;
+            margin: 0;
         }
         
         nav {
-            background-color: var(--secondary-color);
-            padding: 0.8rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #005bb5;
+            padding: 15px;
         }
         
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        nav ul {
+            list-style: none;
+            padding: 0;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            margin: 0;
         }
         
-        nav a {
-            color: var(--white);
+        nav ul li {
             margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: white;
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+            padding: 10px 15px;
+            border-radius: 5px;
         }
         
-        nav a:hover {
-            color: #ffd700;
+        nav ul li a:hover {
+            background-color: #003d80;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        
-        .card {
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-        
-        .card-header {
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .card-body {
+        .content {
+            margin: 20px;
+            background: white;
             padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: left;
         }
         
         .alert {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 4px;
+            text-align: left;
         }
         
         .alert-success {
@@ -211,28 +151,73 @@ $registered_courses = [
         
         .tabs {
             display: flex;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
         }
         
         .tab {
-            padding: 12px 20px;
+            padding: 10px 15px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
+            margin-right: 5px;
         }
         
         .tab.active {
-            border-bottom: 3px solid var(--primary-color);
-            color: var(--primary-color);
+            border-bottom: 3px solid #0073e6;
+            color: #0073e6;
             font-weight: bold;
         }
         
         .tab-content {
             display: none;
-            padding: 20px;
         }
         
         .tab-content.active {
             display: block;
+        }
+        
+        .course-list {
+            margin-top: 20px;
+        }
+        
+        .course-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-card h3 {
+            margin: 0;
+            color: #0073e6;
+        }
+        
+        .course-code {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .course-details {
+            margin: 15px 0;
+        }
+        
+        .course-details p {
+            margin: 5px 0;
+        }
+        
+        .status {
+            font-weight: bold;
+        }
+        
+        .status.available {
+            color: #27ae60;
+        }
+        
+        .status.full {
+            color: #e74c3c;
         }
         
         table {
@@ -242,89 +227,33 @@ $registered_courses = [
         }
         
         th, td {
-            padding: 12px 15px;
+            padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ddd;
         }
         
         th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-        
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .course-card {
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .course-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-        
-        .course-title h3 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-        
-        .course-code {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .course-details {
-            margin: 15px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
-        
-        .detail-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .detail-item i {
-            margin-right: 8px;
-            color: var(--secondary-color);
-            width: 16px;
+            background-color: #f2f2f2;
         }
         
         .btn {
-            padding: 10px 20px;
+            display: inline-block;
+            background-color: #0073e6;
+            color: white;
+            padding: 8px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.3s;
+            text-decoration: none;
+            font-size: 14px;
         }
         
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background-color: #219653;
+        .btn:hover {
+            background-color: #005bb5;
         }
         
         .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
+            background-color: #e74c3c;
         }
         
         .btn-danger:hover {
@@ -332,31 +261,8 @@ $registered_courses = [
         }
         
         .btn:disabled {
-            background-color: #ccc;
+            background-color: #cccccc;
             cursor: not-allowed;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .badge-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-warning {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .badge-danger {
-            background-color: #f8d7da;
-            color: #721c24;
         }
         
         .summary-card {
@@ -366,6 +272,7 @@ $registered_courses = [
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid #ddd;
         }
         
         .summary-item {
@@ -375,7 +282,7 @@ $registered_courses = [
         .summary-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: #0073e6;
         }
         
         .summary-label {
@@ -383,26 +290,13 @@ $registered_courses = [
             color: #666;
         }
         
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 50px;
-        }
-        
         @media (max-width: 768px) {
-            .nav-container {
+            nav ul {
                 flex-direction: column;
-                align-items: center;
             }
             
-            nav a {
-                margin: 5px 10px;
-            }
-            
-            .course-details {
-                grid-template-columns: 1fr;
+            nav ul li {
+                margin: 5px 0;
             }
             
             .summary-card {
@@ -413,36 +307,20 @@ $registered_courses = [
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <img src="/api/placeholder/50/50" alt="SPCF Logo">
-                <h1>SPCF Student Portal</h1>
-            </div>
-            <div class="user-info">
-                <span><i class="fas fa-user"></i> <?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'Student'; ?></span>
-                <a href="logout.php" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-        </div>
-    </header>
-    
+    <h1>Course Registration</h1>
     <nav>
-        <div class="nav-container">
-            <div>
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="student_info.php"><i class="fas fa-user-graduate"></i> Student Info</a>
-                <a href="course_registration.php" class="active"><i class="fas fa-book"></i> Course Registration</a>
-                <a href="class_schedule.php"><i class="fas fa-calendar-alt"></i> Class Schedule</a>
-            </div>
-            <div>
-                <a href="grades.php"><i class="fas fa-chart-line"></i> Grades</a>
-                <a href="payments.php"><i class="fas fa-credit-card"></i> Payments</a>
-                <a href="notifications.php"><i class="fas fa-bell"></i> Notifications</a>
-            </div>
-        </div>
+        <ul>
+            <li><a href="student_info.php">Student Information</a></li>
+            <li><a href="course_registration.php">Course Registration</a></li>
+            <li><a href="faculty_management.php">Faculty Management</a></li>
+            <li><a href="grading_system.php">Grading System</a></li>
+            <li><a href="class_scheduling.php">Class Scheduling</a></li>
+            <li><a href="notifications.php">Notifications</a></li>
+            <li><a href="logout.php">Log Out</a></li>
+        </ul>
     </nav>
     
-    <div class="container">
+    <div class="content">
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="alert alert-success">
                 <i class="fas fa-check-circle"></i> <?php echo $_SESSION['success_message']; ?>
@@ -450,187 +328,149 @@ $registered_courses = [
             </div>
         <?php endif; ?>
         
-        <div class="card">
-            <div class="card-header">
-                <h2><i class="fas fa-graduation-cap"></i> Course Registration</h2>
-                <span>Academic Year 2024-2025, 2nd Semester</span>
-            </div>
+        <h2>Course Registration</h2>
+        <p>Register for courses for the Academic Year 2024-2025, 2nd Semester.</p>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="available">Available Courses</div>
+            <div class="tab" data-tab="registered">Registered Courses</div>
+            <div class="tab" data-tab="summary">Registration Summary</div>
+        </div>
+        
+        <div id="available" class="tab-content active">
+            <h3>Available Courses for Registration</h3>
+            <p>Below are the courses available for the current semester. Click "Register" to add a course to your schedule.</p>
             
-            <div class="tabs">
-                <div class="tab active" data-tab="available">Available Courses</div>
-                <div class="tab" data-tab="registered">Registered Courses</div>
-                <div class="tab" data-tab="summary">Registration Summary</div>
-            </div>
-            
-            <div id="available" class="tab-content active">
-                <div class="card-body">
-                    <h3>Available Courses for Registration</h3>
-                    <p>Below are the courses available for the current semester. Click "Register" to add a course to your schedule.</p>
-                    
-                    <?php foreach ($courses as $course): ?>
-                        <div class="course-card">
-                            <div class="course-header">
-                                <div class="course-title">
-                                    <h3><?php echo htmlspecialchars($course['course_name']); ?></h3>
-                                    <div class="course-code"><?php echo htmlspecialchars($course['course_code']); ?></div>
-                                </div>
-                                <div>
-                                    <?php if ($course['status'] === 'Available'): ?>
-                                        <span class="badge badge-success">Available</span>
-                                    <?php elseif ($course['status'] === 'Full'): ?>
-                                        <span class="badge badge-danger">Full</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-warning"><?php echo htmlspecialchars($course['status']); ?></span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            
-                            <p><?php echo htmlspecialchars($course['description']); ?></p>
-                            
-                            <div class="course-details">
-                                <div class="detail-item">
-                                    <i class="fas fa-user-tie"></i>
-                                    <span><?php echo htmlspecialchars($course['instructor']); ?></span>
-                                </div>
-                                <div class="detail-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span><?php echo htmlspecialchars($course['schedule']); ?></span>
-                                </div>
-                                <div class="detail-item">
-                                    <i class="fas fa-book"></i>
-                                    <span><?php echo htmlspecialchars($course['units']); ?> Units</span>
-                                </div>
-                                <div class="detail-item">
-                                    <i class="fas fa-users"></i>
-                                    <span>Slots: <?php echo htmlspecialchars($course['slots']); ?></span>
-                                </div>
-                            </div>
-                            
-                            <form method="post" action="">
-                                <input type="hidden" name="course_code" value="<?php echo htmlspecialchars($course['course_code']); ?>">
-                                <button type="submit" name="add_course" class="btn btn-success" <?php echo $course['status'] === 'Full' ? 'disabled' : ''; ?>>
-                                    <i class="fas fa-plus-circle"></i> <?php echo $course['status'] === 'Full' ? 'Course Full' : 'Register Course'; ?>
-                                </button>
-                            </form>
+            <div class="course-list">
+                <?php foreach ($courses as $course): ?>
+                    <div class="course-card">
+                        <h3><?php echo htmlspecialchars($course['course_name']); ?></h3>
+                        <div class="course-code"><?php echo htmlspecialchars($course['course_code']); ?></div>
+                        
+                        <p><?php echo htmlspecialchars($course['description']); ?></p>
+                        
+                        <div class="course-details">
+                            <p>Instructor: <?php echo htmlspecialchars($course['instructor']); ?></p>
+                            <p>Schedule: <?php echo htmlspecialchars($course['schedule']); ?></p>
+                            <p>Units: <?php echo htmlspecialchars($course['units']); ?></p>
+                            <p>Slots: <?php echo htmlspecialchars($course['slots']); ?></p>
+                            <p class="status <?php echo strtolower($course['status']); ?>">
+                                Status: <?php echo htmlspecialchars($course['status']); ?>
+                            </p>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            
-            <div id="registered" class="tab-content">
-                <div class="card-body">
-                    <h3>Your Registered Courses</h3>
-                    <p>These are the courses you have registered for the current semester.</p>
-                    
-                    <?php if (empty($registered_courses)): ?>
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i> You haven't registered for any courses yet.
-                        </div>
-                    <?php else: ?>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Course Code</th>
-                                    <th>Course Name</th>
-                                    <th>Schedule</th>
-                                    <th>Instructor</th>
-                                    <th>Units</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($registered_courses as $course): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($course['course_code']); ?></td>
-                                        <td><?php echo htmlspecialchars($course['course_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($course['schedule']); ?></td>
-                                        <td><?php echo htmlspecialchars($course['instructor']); ?></td>
-                                        <td><?php echo htmlspecialchars($course['units']); ?></td>
-                                        <td>
-                                            <form method="post" action="">
-                                                <input type="hidden" name="drop_course" value="<?php echo htmlspecialchars($course['course_code']); ?>">
-                                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Drop</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    <?php endif; ?>
-                </div>
-            </div>
-            
-            <div id="summary" class="tab-content">
-                <div class="card-body">
-                    <h3>Registration Summary</h3>
-                    <p>Summary of your course registration for the current semester.</p>
-                    
-                    <div class="summary-card">
-                        <div class="summary-item">
-                            <div class="summary-value"><?php echo count($registered_courses); ?></div>
-                            <div class="summary-label">Registered Courses</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-value">
-                                <?php 
-                                $total_units = 0;
-                                foreach ($registered_courses as $course) {
-                                    $total_units += $course['units'];
-                                }
-                                echo $total_units;
-                                ?>
-                            </div>
-                            <div class="summary-label">Total Units</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-value">21</div>
-                            <div class="summary-label">Maximum Units Allowed</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-value">
-                                <?php echo 21 - $total_units; ?>
-                            </div>
-                            <div class="summary-label">Units Remaining</div>
-                        </div>
+                        
+                        <form method="post" action="">
+                            <input type="hidden" name="course_code" value="<?php echo htmlspecialchars($course['course_code']); ?>">
+                            <button type="submit" name="add_course" class="btn" <?php echo $course['status'] === 'Full' ? 'disabled' : ''; ?>>
+                                <?php echo $course['status'] === 'Full' ? 'Course Full' : 'Register Course'; ?>
+                            </button>
+                        </form>
                     </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Registration Deadlines</h4>
-                        </div>
-                        <div class="card-body">
-                            <table>
-                                <tr>
-                                    <th>Event</th>
-                                    <th>Date</th>
-                                </tr>
-                                <tr>
-                                    <td>Registration Start</td>
-                                    <td>March 15, 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Registration End</td>
-                                    <td>May 10, 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Late Registration</td>
-                                    <td>May 11 - May 20, 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Add/Drop Period</td>
-                                    <td>May 21 - June 5, 2025</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        
+        <div id="registered" class="tab-content">
+            <h3>Your Registered Courses</h3>
+            <p>These are the courses you have registered for the current semester.</p>
+            
+            <?php if (empty($registered_courses)): ?>
+                <div class="alert alert-success">
+                    <i class="fas fa-exclamation-triangle"></i> You haven't registered for any courses yet.
                 </div>
+            <?php else: ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Schedule</th>
+                            <th>Instructor</th>
+                            <th>Units</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($registered_courses as $course): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($course['course_code']); ?></td>
+                                <td><?php echo htmlspecialchars($course['course_name']); ?></td>
+                                <td><?php echo htmlspecialchars($course['schedule']); ?></td>
+                                <td><?php echo htmlspecialchars($course['instructor']); ?></td>
+                                <td><?php echo htmlspecialchars($course['units']); ?></td>
+                                <td>
+                                    <form method="post" action="">
+                                        <input type="hidden" name="drop_course" value="<?php echo htmlspecialchars($course['course_code']); ?>">
+                                        <button type="submit" class="btn btn-danger">Drop</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+        
+        <div id="summary" class="tab-content">
+            <h3>Registration Summary</h3>
+            <p>Summary of your course registration for the current semester.</p>
+            
+            <div class="summary-card">
+                <div class="summary-item">
+                    <div class="summary-value"><?php echo count($registered_courses); ?></div>
+                    <div class="summary-label">Registered Courses</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">
+                        <?php 
+                        $total_units = 0;
+                        foreach ($registered_courses as $course) {
+                            $total_units += $course['units'];
+                        }
+                        echo $total_units;
+                        ?>
+                    </div>
+                    <div class="summary-label">Total Units</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">21</div>
+                    <div class="summary-label">Maximum Units Allowed</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">
+                        <?php echo 21 - $total_units; ?>
+                    </div>
+                    <div class="summary-label">Units Remaining</div>
+                </div>
+            </div>
+            
+            <div class="course-card">
+                <h3>Registration Deadlines</h3>
+                <table>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                    </tr>
+                    <tr>
+                        <td>Registration Start</td>
+                        <td>March 15, 2025</td>
+                    </tr>
+                    <tr>
+                        <td>Registration End</td>
+                        <td>May 10, 2025</td>
+                    </tr>
+                    <tr>
+                        <td>Late Registration</td>
+                        <td>May 11 - May 20, 2025</td>
+                    </tr>
+                    <tr>
+                        <td>Add/Drop Period</td>
+                        <td>May 21 - June 5, 2025</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
-    
-    <footer>
-        <p>&copy; 2025 SPCF Student Portal. All rights reserved.</p>
-    </footer>
     
     <script>
         // Tab functionality
