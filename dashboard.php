@@ -1,67 +1,3 @@
-<?php
-session_start();
-
-// Check if user is logged in
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: login.php");
-    exit();
-}
-
-// Session timeout after 30 minutes of inactivity
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
-    session_unset();
-    session_destroy();
-    header("Location: login.php?message=session_expired");
-    exit();
-}
-$_SESSION['last_activity'] = time();
-
-// Get user information from session
-$user_name = $_SESSION['user_name'];
-$user_role = $_SESSION['user_role'];
-$can_edit = $_SESSION['can_edit'];
-$can_view = $_SESSION['can_view'];
-
-// Handle logout
-if (isset($_GET['logout'])) {
-    session_unset();
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
-
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "spcf_portal"; // Adjust database name as needed
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch announcements
-$announcements = [];
-$result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC LIMIT 5");
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $announcements[] = $row;
-    }
-}
-
-// Fetch courses (example data - adjust query based on your schema)
-$courses = [];
-$result = $conn->query("SELECT * FROM courses ORDER BY course_code");
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $courses[] = $row;
-    }
-}
-
-$conn->close();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -426,8 +362,8 @@ $conn->close();
         <main class="main-content">
             <div class="header">
                 <div>
-                    <h1 class="welcome-message">Welcome, <?php echo htmlspecialchars($user_name); ?></h1>
-                    <span class="role-badge role-<?php echo strtolower($user_role); ?>"><?php echo ucfirst($user_role); ?></span>
+                    <h1 class="welcome-message">Welcome, User</h1>
+                    <span class="role-badge role-student">Student</span>
                 </div>
                 <div class="user-actions">
                     <button class="notification-bell">
@@ -436,9 +372,9 @@ $conn->close();
                     </button>
                     <div class="user-menu">
                         <div class="user-avatar">
-                            <?php echo strtoupper(substr($user_name, 0, 1)); ?>
+                            S
                         </div>
-                        <span><?php echo htmlspecialchars($user_name); ?></span>
+                        <span>User</span>
                     </div>
                 </div>
             </div>
@@ -449,29 +385,17 @@ $conn->close();
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h2 class="card-title">Announcements</h2>
-                        <?php if ($can_edit): ?>
-                        <div class="card-actions">
-                            <a href="#"><i class="fas fa-plus"></i> Create New</a>
-                        </div>
-                        <?php endif; ?>
                     </div>
-                    
-                    <?php if (!empty($announcements)): ?>
-                        <?php foreach ($announcements as $announcement): ?>
-                        <div class="announcement">
-                            <div class="announcement-title"><?php echo htmlspecialchars($announcement['title']); ?></div>
-                            <p><?php echo substr(htmlspecialchars($announcement['content']), 0, 100) . '...'; ?></p>
-                            <div class="announcement-meta">
-                                <span><i class="far fa-clock"></i> <?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span> • 
-                                <span><i class="far fa-user"></i> <?php echo htmlspecialchars($announcement['posted_by']); ?></span>
-                            </div>
+                    <div class="announcement">
+                        <div class="announcement-title">Announcement Title</div>
+                        <p>Announcement content...</p>
+                        <div class="announcement-meta">
+                            <span><i class="far fa-clock"></i> Mar 29, 2025</span> • 
+                            <span><i class="far fa-user"></i> Admin</span>
                         </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No announcements available.</p>
-                    <?php endif; ?>
+                    </div>
                 </div>
-                
+
                 <!-- Quick Links Card -->
                 <div class="dashboard-card">
                     <div class="card-header">
@@ -490,88 +414,10 @@ $conn->close();
                                 <div style="margin-top: 5px; color: #333;">Calendar</div>
                             </div>
                         </a>
-                        <a href="#" style="text-decoration: none;">
-                            <div style="background-color: #fff8e1; padding: 15px; border-radius: 5px; text-align: center;">
-                                <i class="fas fa-chart-line" style="font-size: 24px; color: #f57f17;"></i>
-                                <div style="margin-top: 5px; color: #333;">Grades</div>
-                            </div>
-                        </a>
-                        <a href="#" style="text-decoration: none;">
-                            <div style="background-color: #f3e5f5; padding: 15px; border-radius: 5px; text-align: center;">
-                                <i class="fas fa-comments" style="font-size: 24px; color: #6a1b9a;"></i>
-                                <div style="margin-top: 5px; color: #333;">Messages</div>
-                            </div>
-                        </a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Courses Table -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h2 class="card-title">My Courses</h2>
-                    <?php if ($can_edit): ?>
-                    <div class="card-actions">
-                        <a href="#"><i class="fas fa-plus"></i> Add Course</a>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Course Code</th>
-                            <th>Title</th>
-                            <th>Instructor</th>
-                            <th>Schedule</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($courses)): ?>
-                            <?php foreach ($courses as $course): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($course['course_code']); ?></td>
-                                <td><?php echo htmlspecialchars($course['title']); ?></td>
-                                <td><?php echo htmlspecialchars($course['instructor']); ?></td>
-                                <td><?php echo htmlspecialchars($course['schedule']); ?></td>
-                                <td class="action-buttons">
-                                    <a href="view_course.php?id=<?php echo $course['id']; ?>" class="btn btn-view">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
-                                    
-                                    <?php if ($can_edit): ?>
-                                    <a href="edit_course.php?id=<?php echo $course['id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <?php else: ?>
-                                    <span class="btn btn-edit disabled">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if ($user_role == 'admin'): ?>
-                                    <a href="delete_course.php?id=<?php echo $course['id']; ?>" class="btn btn-delete" 
-                                       onclick="return confirm('Are you sure you want to delete this course?');">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </a>
-                                    <?php else: ?>
-                                    <span class="btn btn-delete disabled">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="5" style="text-align: center;">No courses available.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-            
+
             <div class="footer">
                 <p>&copy; <?php echo date('Y'); ?> SPCF Portal. All rights reserved.</p>
             </div>
