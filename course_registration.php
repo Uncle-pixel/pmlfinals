@@ -7,75 +7,80 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Process course registration
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_course'])) {
-    $course_code = $_POST['course_code'];
-    // In a real application, you would:
-    // 1. Check if the student is already registered for this course
-    // 2. Check if there are available slots
-    // 3. Insert the registration into the database
-    
-    // Simulating successful registration
-    $_SESSION['success_message'] = "Successfully registered for " . $course_code;
+// Include database connection
+$servername = "localhost"; // Replace with your database server name if different
+$username = "root";        // Replace with your database username
+$password = "";            // Replace with your database password
+$dbname = "spcf_portal";   // Replace with your database name
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get user role
+$user_role = $_SESSION['user_role'];
+
+// Fetch all active courses
+$courses_query = "SELECT * FROM courses WHERE is_active = 1";
+$courses_result = $conn->query($courses_query);
+
+// Fetch all students (for Admin/Faculty to assign students to courses)
+if ($user_role === 'admin' || $user_role === 'faculty') {
+    $students_query = "SELECT student_id, name FROM students WHERE is_active = 1";
+    $students_result = $conn->query($students_query);
+}
+
+// Handle course registration (Admin/Faculty adding students to courses)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_student']) && ($user_role === 'admin' || $user_role === 'faculty')) {
+    $student_id = $_POST['student_id'];
+    $course_id = $_POST['course_id'];
+
+    // Check if the student is already enrolled in the course
+    $check_query = "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?";
+    $stmt = $conn->prepare($check_query);
+    $stmt->bind_param("ii", $student_id, $course_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        // Enroll the student in the course
+        $enroll_query = "INSERT INTO enrollments (student_id, course_id, enrollment_date, status) VALUES (?, ?, NOW(), 'Enrolled')";
+        $stmt = $conn->prepare($enroll_query);
+        $stmt->bind_param("ii", $student_id, $course_id);
+        if ($stmt->execute()) {
+            $_SESSION['success_message'] = "Student successfully registered for the course!";
+        } else {
+            $_SESSION['error_message'] = "Failed to register the student. Please try again.";
+        }
+    } else {
+        $_SESSION['error_message'] = "The student is already enrolled in this course.";
+    }
     header("Location: course_registration.php");
     exit();
 }
 
-// Example: Fetch dynamic data for courses (replace with DB query later)
-$courses = [
-    [
-        'course_code' => 'CS101',
-        'course_name' => 'Introduction to Programming',
-        'description' => 'Learn the basics of programming using Python.',
-        'instructor' => 'Dr. Smith',
-        'schedule' => 'MWF 10:00 AM - 11:30 AM',
-        'units' => 3,
-        'status' => 'Available',
-        'slots' => '25/30'
-    ],
-    [
-        'course_code' => 'MATH201',
-        'course_name' => 'Calculus II',
-        'description' => 'Advanced calculus topics for engineering students.',
-        'instructor' => 'Dr. Johnson',
-        'schedule' => 'TTh 1:00 PM - 2:30 PM',
-        'units' => 4,
-        'status' => 'Full',
-        'slots' => '40/40'
-    ],
-    [
-        'course_code' => 'ENG105',
-        'course_name' => 'Technical Writing',
-        'description' => 'Develop professional writing skills for technical documentation.',
-        'instructor' => 'Prof. Williams',
-        'schedule' => 'MWF 2:00 PM - 3:00 PM',
-        'units' => 3,
-        'status' => 'Available',
-        'slots' => '18/30'
-    ],
-    [
-        'course_code' => 'PHYS202',
-        'course_name' => 'Physics for Engineers',
-        'description' => 'Applied physics concepts for engineering applications.',
-        'instructor' => 'Dr. Garcia',
-        'schedule' => 'TTh 9:00 AM - 11:00 AM',
-        'units' => 4,
-        'status' => 'Available',
-        'slots' => '22/35'
-    ]
-];
-
-// Get registered courses (in a real app, this would come from the database)
-$registered_courses = [
-    [
-        'course_code' => 'BIO101',
-        'course_name' => 'Introduction to Biology',
-        'schedule' => 'MWF 8:00 AM - 9:30 AM',
-        'instructor' => 'Dr. Miller',
-        'units' => 3
-    ]
-];
+// Fetch registered courses for the logged-in student
+$registered_courses = [];
+if ($user_role === 'student') {
+    $student_id = $_SESSION['user_id'];
+    $registered_query = "SELECT c.course_code, c.course_name, c.schedule, c.instructor, c.units 
+                         FROM enrollments e
+                         JOIN courses c ON e.course_id = c.course_id
+                         WHERE e.student_id = ?";
+    $stmt = $conn->prepare($registered_query);
+    $stmt->bind_param("i", $student_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $registered_courses[] = $row;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -290,6 +295,21 @@ $registered_courses = [
             color: #666;
         }
         
+        .back-to-dashboard {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .back-to-dashboard:hover {
+            background-color: #218838;
+        }
+        
         @media (max-width: 768px) {
             nav ul {
                 flex-direction: column;
@@ -342,7 +362,7 @@ $registered_courses = [
             <p>Below are the courses available for the current semester. Click "Register" to add a course to your schedule.</p>
             
             <div class="course-list">
-                <?php foreach ($courses as $course): ?>
+                <?php while ($course = $courses_result->fetch_assoc()): ?>
                     <div class="course-card">
                         <h3><?php echo htmlspecialchars($course['course_name']); ?></h3>
                         <div class="course-code"><?php echo htmlspecialchars($course['course_code']); ?></div>
@@ -366,7 +386,7 @@ $registered_courses = [
                             </button>
                         </form>
                     </div>
-                <?php endforeach; ?>
+                <?php endwhile; ?>
             </div>
         </div>
         
@@ -470,6 +490,9 @@ $registered_courses = [
                 </table>
             </div>
         </div>
+
+        <!-- Back to Dashboard Button -->
+        <a href="dashboard.php" class="back-to-dashboard">Back to Dashboard</a>
     </div>
     
     <script>

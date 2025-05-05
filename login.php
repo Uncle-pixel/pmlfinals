@@ -28,16 +28,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = null;
     $user_name = null;
     $user_role = null;
+    $student_number = null;
     
     // Check in the appropriate table based on selected role
     if ($role == 'student') {
-        $stmt = $conn->prepare("SELECT student_id, name, password FROM students WHERE email = ?");
+        $stmt = $conn->prepare("SELECT student_id, student_number, name, password FROM students WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
         
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($user_id, $user_name, $stored_password);
+            $stmt->bind_result($user_id, $student_number, $user_name, $stored_password);
             $stmt->fetch();
             
             if ($password === $stored_password) {
@@ -85,10 +86,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If user is found and password matches, set session variables and redirect
     if ($user_found) {
         // Set session variables
-        $_SESSION['user_id'] = $user_id;
+        $_SESSION['user_id'] = $user_id;  // This is the primary key (student_id for students)
         $_SESSION['user_name'] = $user_name;
         $_SESSION['user_role'] = $user_role;
         $_SESSION['logged_in'] = true;
+        
+        // For students, also store student_number (important for lookups)
+        if ($user_role == 'student' && $student_number) {
+            $_SESSION['student_number'] = $student_number;
+        }
         
         // Set permissions based on role
         if ($user_role == 'admin') {
@@ -108,8 +114,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Set last activity time for session timeout
         $_SESSION['last_activity'] = time();
         
-        // Redirect to the dashboard
-        header("Location: dashboard.php");
+        // Based on role, redirect to appropriate page
+        if ($user_role == 'student') {
+            header("Location: student_dashboard.php");
+        } else {
+            header("Location: dashboard.php");
+        }
         exit();
     } else {
         $error_message = "Invalid email or password for the selected role.";
@@ -255,7 +265,7 @@ $conn->close();
 </head>
 <body>
     <div class="login-container">
-        <img src="school-logo.png" alt="SPCF Logo" class="school-logo">
+        <img src="school-logo.png" alt="SPCF Logo" class="school-logo" onerror="this.src='https://via.placeholder.com/80x80?text=SPCF'">
         <h1>SPCF Portal Login</h1>
         
         <?php if (!empty($error_message)): ?>
